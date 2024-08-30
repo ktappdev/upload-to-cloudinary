@@ -36,9 +36,9 @@ func main() {
 
 	// Upload each file
 	for _, file := range files {
-		if !file.IsDir() {
+		if !file.IsDir() && isImageFile(file.Name()) {
 			filePath := filepath.Join(".", file.Name())
-			publicID := filepath.Join(folderName, file.Name())
+			publicID := filepath.Join(folderName, strings.ReplaceAll(strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())), "'", ""))
 
 			// Create boolean pointers
 			useFilename := true
@@ -60,10 +60,17 @@ func main() {
 
 	fmt.Println("Upload process completed.")
 }
+<<<<<<< HEAD
 
 func getInput(prompt string) string {
 	reader := bufio.NewReader(os.Stdin)
 	fmt.Print(prompt)
+=======
+func isImageFile(fileName string) bool {
+	ext := strings.ToLower(filepath.Ext(fileName))
+	return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif"
+}
+>>>>>>> Snippet
 	input, _ := reader.ReadString('\n')
 	return strings.TrimSpace(input)
 }
