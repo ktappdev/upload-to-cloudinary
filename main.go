@@ -36,9 +36,11 @@ func main() {
 
 	// Upload each file
 	for _, file := range files {
-		if !file.IsDir() {
+		if !file.IsDir() && isImageFile(file.Name()) {
 			filePath := filepath.Join(".", file.Name())
-			publicID := filepath.Join(folderName, strings.ReplaceAll(strings.TrimSuffix(file.Name(), ".jpg"), "'", ""))
+			// Remove leading dot and file extension from the public ID
+			publicID := filepath.Join(folderName, strings.TrimSuffix(file.Name(), filepath.Ext(file.Name())))
+			publicID = strings.ReplaceAll(publicID, "'", "") // Remove single quotes
 
 			// Create boolean pointers
 			useFilename := true
@@ -66,4 +68,9 @@ func getInput(prompt string) string {
 	fmt.Print(prompt)
 	input, _ := reader.ReadString('\n')
 	return strings.TrimSpace(input)
+}
+
+func isImageFile(filename string) bool {
+	ext := strings.ToLower(filepath.Ext(filename))
+	return ext == ".jpg" || ext == ".jpeg" || ext == ".png" || ext == ".gif"
 }
